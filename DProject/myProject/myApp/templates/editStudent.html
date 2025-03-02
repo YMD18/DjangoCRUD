@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page 2</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0 10px;
+            color: #272724;
+            font-family: Tahoma;
+            position: relative;
+        }
+
+        h1 {
+            margin: 0;
+            padding: 25px;
+            text-align: center;
+        }
+
+        form {
+            background-color: #272724;
+            padding: 15px 25px;
+            width: 400px;
+            margin: 15px auto;
+            border-radius: 8px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        input {
+            display: block;
+            width: 100%;
+            margin-top: 8px;
+            padding: 10px 16px;
+            font-size: 16px;
+            color: #272724;
+            border: none;
+        }
+
+        .submitBtn {
+            width: 100%;
+            padding: 8px 12px;
+            font-size: 16px;
+            font-weight: 800;
+            color: #272724;
+            background-color: #fff;
+            border: none;
+            border-radius: 4px;
+            transition: all 0.20s linear;
+        }
+
+        .submitBtn:hover {
+            background-color: #272724;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .homeBtn {
+            position: absolute;
+            top: 15px;
+            left: 10px;
+            background-color: transparent;
+            border: none;
+            font-size: 30px;
+        }
+
+        a:visited {
+            color: inherit;
+            text-decoration: none; 
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        @media (max-width: 480px) {
+
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            h1 {
+                text-align: center;
+                font-size: 20px;
+            }
+
+            form {
+                font-size: 1em;
+                width: 100vw;
+                margin: 0;
+                border-bottom-right-radius: 0;
+                border-bottom-left-radius: 0;
+                padding-top: 50px;
+                padding-bottom: 50px;
+            }
+
+            .submitBtn {
+                margin-top: 15px;
+            }
+
+            .homeBtn {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>{{student.FirstName}} {{student.LastName}}</h1>
+    <a href="/" class="homeBtn">⬅</a>
+
+    <form action="{% url 'editStudent' student.id %}" method="POST">
+        {% csrf_token %}
+        <label for="firstName">First Name <input type="text" id="firstName" name="firstName" value="{{student.FirstName}}" required></label>
+        <label for="lastName">Last Name <input type="text" id="lastName" name="lastName" value="{{student.LastName}}" required></label>
+        <label for="email">Email <input type="email" id="email" name="email" value="{{student.Email}}" required></label>
+        <label for="birthDate">Date of Birth <input type="date" id="birthDate" name="birthDate" value="{{student.DateOfBirth}}" required></label>
+        <label for="course">Course <input type="text" id="course" name="course" value="{{student.Course}}" required></label>
+        <label for="enrollmentDate">Enrollment Date <input type="date" id="enrollmentDate" name="enrollmentDate" value="" required></label>
+
+        <button type="submit" class="submitBtn">Submit</button>
+    </form>
+</body>
+</html>

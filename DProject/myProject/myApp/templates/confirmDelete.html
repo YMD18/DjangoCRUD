@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocWorkshop</title>
+    <style>
+
+        .yesBtn {
+            background-color: #39d1ff;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            font-size: 16px;
+            margin: 10px 20px;
+        }
+
+        .noBtn {
+            background-color: #ff3d37;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            font-size: 16px;
+            margin: 10px 20px;
+        }
+
+        #popupContent button:hover {
+            opacity: 0.8;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="popupInner">
+        <br>
+        <h2>Remove {{student.FirstName}} from the list?</h2>
+        <a href="{% url 'deleteStudent' student.id %}"><button onclick="closePopup" class="yesBtn">Yes</button></a>
+        <button onclick="closePopup()" class="noBtn">No</button>
+    </div>
+</body>
+</html>

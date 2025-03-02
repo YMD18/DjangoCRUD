@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0 10px;
+            color: #272724;
+            font-family: Tahoma;
+        }
+
+        h1 {
+            margin: 0;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .addStudentBtn {
+            margin: 0 25px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            color: #fff;
+            background-color: #272724;
+            transition: all 0.20s linear;
+        }
+
+        .addStudentBtn:hover {
+            background-color: #fff;
+            color: #272724;
+        }
+
+        table {
+            margin: 10px auto;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            border-top: 1px solid #272724;
+            width: 100%;
+            text-align: center;
+        }
+
+        th,td {
+            padding: 15px 18px;
+        }
+
+        tbody tr {
+            background-color: rgb(235, 235, 235);
+            margin-top: 4px;
+            margin-bottom: 4px;
+        }
+
+        td:last-child {
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        
+        td:first-child {
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+        }
+
+        button {
+            font-weight: 600;
+        }
+
+        button:hover {
+            cursor: pointer;
+        }
+
+        .editBtn {
+            background-color: #f7be04;
+            color: #fff;
+            border: none;
+            font-size: 16px;
+            padding: 8px 10px;
+            border-radius: 4px;
+            margin-right: 8px;
+            transition: all 0.20s linear;
+        }
+
+        .editBtn:hover {
+            background-color: transparent;
+            color: black;
+        }
+
+        .deleteBtn {
+            background-color: rgb(255, 57, 57);
+            color: #fff;
+            border: none;
+            font-size: 16px;
+            padding: 8px 10px;
+            border-radius: 4px;
+            transition: all 0.20s linear;
+        }
+
+        .deleteBtn:hover {
+            background-color: transparent;
+            color: rgb(255, 57, 57);
+        }
+
+        /* Hide modal by default */
+        #popupContainer {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Modal content */
+        #popupContent {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            min-width: 300px;
+            text-align: center;
+        }
+
+        .smallSize {
+            display: none;
+            width: 100%;
+            border: 1px solid #272724;
+            margin: 15px auto;
+            padding: 10px;
+            box-shadow: 5px 5px 10px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .smallButtons {
+            display: flex;
+            justify-content: right;
+        }
+
+        @media (max-width: 480px) {
+            table {
+                display: none;
+            }
+
+            .smallSize {
+                display: block;
+            }
+
+            .addStudentBtn {
+                margin: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Student List</h1>
+
+    <a href="addStudent/"><button class="addStudentBtn">Add new student</button></a> <br>
+
+
+    <table>
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Date Of Birth</th>
+                <th>Course</th>
+                <th>Enrollment Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{student.id}}</td>
+                <td>{{student.FirstName}}</td>
+                <td>{{student.LastName}}</td>
+                <td>{{student.Email}}</td>
+                <td>{{student.DateOfBirth}}</td>
+                <td>{{student.Course}}</td>
+                <td>{{student.EnrollmentDate}}</td>
+                <td>
+                    <a href="{% url 'editStudent' student.id%}"><button class="editBtn">Edit</button></a>
+                    <button onclick="openPopup(this)" data-student-id="{{ student.id }}" class="deleteBtn">Delete</button>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody> 
+    </table>
+
+    <div id="popupContainer">
+        <div id="popupContent"></div>
+    </div>
+    {% for student in students %}
+        <div class="smallSize">
+            <p class="studID">ID: <strong>{{student.id}}</strong></p>
+            <p class="studName">NAME: <strong>{{student.FirstName}}, {{student.LastName}}</strong></p>
+            <p class="studCourse">COURSE: <strong>{{student.Course}}</strong></p>
+            <p class="studEmail">EMAIL: <strong>{{student.Email}}</strong></p>
+            <p class="studBirthday">BIRTHDAY: <strong>{{student.DateOfBirth}}</strong></p>
+            <p class="studEnrollDate">ENROLLED ON: <strong>{{student.EnrollmentDate}}</strong></p>
+            <div class="smallButtons">
+                <a href="{% url 'editStudent' student.id%}"><button class="editBtn">Edit</button></a>
+                <button onclick="openPopup(this)" data-student-id="{{ student.id }}" class="deleteBtn">Delete</button>
+            </div>
+        </div>
+    {% endfor %}
+    <script>
+        function openPopup(button) {
+            let studentID = button.getAttribute("data-student-id");
+            
+            fetch(`/confirmDelete/${studentID}`)
+            // fetch(`/confirmDelete/${studentID}`)  // Correctly construct the URL
+
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("popupContent").innerHTML = data;
+                document.getElementById("popupContainer").style.display = "flex";
+            });
+
+            console.log(studentID)
+        }
+
+        function closePopup() {
+            document.getElementById("popupContainer").style.display = "none";
+        }
+    </script>
+</body>
+</html>
